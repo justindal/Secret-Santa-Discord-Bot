@@ -14,7 +14,7 @@ intents.members = True
 description = 'discord bot to handle our secret santa'
 
 bot = commands.Bot(command_prefix='ss ', description=description, intents=intents)
-bot.ssParticipants = set()
+bot.ssParticipants = dict()
 
 @bot.event
 async def on_ready():
@@ -43,20 +43,29 @@ async def add(ctx, left: int, right: int):
 
 @bot.command()
 async def join(ctx):
-    x = {}
-    x[ctx.message.author] = ctx.message.author.id
-    bot.ssParticipants.add(x)
-    await ctx.send(f'{ctx.message.author} has joined the game!')
+    # dict of message.author to message.author.id
+    if ctx.author not in bot.ssParticipants:
+        bot.ssParticipants[ctx.author] = ctx.author.id
+        await ctx.send(f'added {ctx.author} to the list')
+    else:
+        await ctx.send(f'{ctx.author} is already in the list!!!!!\n shame on you')
 
 
 @bot.command()
 async def printParticipants(ctx):
     for i in bot.ssParticipants:
-        await ctx.send(i)
+        user = bot.get_user(bot.ssParticipants[i])
+        await ctx.send(user)
+
+@bot.command() # test to see of the bot can dm a user
+async def test(ctx):
+    for i in bot.ssParticipants:
+        user = bot.get_user(bot.ssParticipants[i])
+        await user.send(user)
 
 @bot.command()
-async def DM(ctx, user: discord.User, *, message=None):
-    message = message or "This Message is sent via DM"
-    await user.send(message)
+async def start(ctx):
+    await ctx.send('starting secret santa with following users:')
+    printParticipants(ctx)
 
 bot.run(TOKEN)
