@@ -75,6 +75,17 @@ async def start(ctx):
         players.remove(randomPlayer)
         await i.send(f'your secret santa is {randomPlayer}')
         await ctx.send(f'sent {randomPlayer} to {i}') # for debugging
+
+@bot.command()
+async def h(ctx):
+    text = '''
+    ss join - join the secret santa pool
+    ss leave - leave the secret santa pool
+    ss printParticipants - print the current participants
+    ss start - start the secret santa with the current participants
+    ss h - print this message
+    '''
+    await ctx.send(text)
         
 @bot.command()  
 async def testing(ctx):
