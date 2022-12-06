@@ -47,6 +47,14 @@ async def join(ctx):
         await ctx.send(f'{ctx.author} is already in the list!!!!!\n shame on you')
 
 @bot.command()
+async def leave(ctx):
+    if ctx.author in bot.ssParticipants:
+        bot.ssParticipants.pop(ctx.author)
+        await ctx.send(f'removed {ctx.author} from the list')
+    else:
+        await ctx.send('you are not in the list. why are you trying to leave?')
+
+@bot.command()
 async def printParticipants(ctx):
     for i in bot.ssParticipants:
         user = bot.get_user(bot.ssParticipants[i])
